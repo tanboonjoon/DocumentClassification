@@ -32,7 +32,8 @@ public class DocumentClassification {
 	private static int highestOccurence = 0;
 	private static String currentCategory = "";
 	final private static String EMPTY_STRING ="";
-
+	final private static String RTF_FORMAT ="please save as a doc/docx document ";
+	final private static String DOCUMENT_CATEGORY = "Category of this Document is : ";
 	private static int countAffidavits = 0;
 	private static int countCorrespondence = 0;
 	private static int countCriminalLaw = 0;
@@ -40,7 +41,7 @@ public class DocumentClassification {
 	private static int countPleadings = 0;
 	private static int countSubmission = 0;
 	private static int countResearchMemo = 0;
-
+	
 	public static void main(String[] args) {
 		scn = new Scanner(System.in);
 		initializePattern();
@@ -62,7 +63,7 @@ public class DocumentClassification {
 				System.out.println(e.getMessage());
 			} catch (IOException e) {
 			} catch (IllegalArgumentException e) {
-				System.out.println(e.getMessage() + " please save as a doc/docx document");
+				System.out.println(e.getMessage() + RTF_FORMAT);
 			}
 
 			resetStates();
@@ -93,15 +94,15 @@ public class DocumentClassification {
 	private static void readDocx(File file) throws IOException {
 		FileInputStream fis = new FileInputStream(file.getAbsolutePath());
 		docx = new XWPFDocument(fis);
-		List<XWPFParagraph> paragraphs = docx.getParagraphs();
-		for (int i = 0; i < paragraphs.size(); i++) {
-			String para = paragraphs.get(i).getText().trim().replaceAll("\\s+", " ").toLowerCase();
+		List<XWPFParagraph> paragraphsList = docx.getParagraphs();
+		for (int i = 0; i < paragraphsList.size(); i++) {
+			String para = paragraphsList.get(i).getText().trim().replaceAll("\\s+", " ").toLowerCase();
 			if (para.equals(EMPTY_STRING)) {
 				continue;
 			}
 			checkPattern(para);
 		}
-		System.out.println("Category of this Document is : " + currentCategory);
+		System.out.println(DOCUMENT_CATEGORY + currentCategory);
 		fis.close();
 	}
 
@@ -174,7 +175,7 @@ public class DocumentClassification {
 			checkPattern(para);
 
 		}
-		System.out.println("Category of this Document is : " + currentCategory);
+		System.out.println(DOCUMENT_CATEGORY + currentCategory);
 		fis.close();
 	}
 
